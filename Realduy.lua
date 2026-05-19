@@ -1,71 +1,47 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-local CorrectKey = "Top1severscript_freekeynew" 
+-- ========================================================
+-- PHẦN 1: HỆ THỐNG UI THỦ CÔNG (ĐỘC LẬP)
+-- ========================================================
+local Players = game:GetService("Players"); local LP = Players.LocalPlayer
+local PlayerGui = LP:WaitForChild("PlayerGui")
+local ScreenGui = Instance.new("ScreenGui", PlayerGui); ScreenGui.Name = "LoginSystem"
 
--- 1. TẠO GIAO DIỆN NHẬP KEY
-local KeyWindow = Rayfield:CreateWindow({
-   Name = "Duydepzai Hub — Key System",
-   LoadingTitle = "Đang kiểm tra hệ thống...",
-   LoadingSubtitle = "by Duydepzai",
-   ConfigurationSaving = { Enabled = false }
-})
+local function StartMainScript()
+    -- Ở ĐÂY LÀ NƠI RAYFIELD BẮT ĐẦU LOAD
+    local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+    
+    -- TOÀN BỘ CODE CŨ CỦA ÔNG SẼ NẰM DƯỚI ĐÂY
+    local Window = Rayfield:CreateWindow({
+       Name = "DUYDEPZAI hub",
+       LoadingTitle = "đang tải tài nguyên",
+       LoadingSubtitle = "by duy đẹp zai",
+       ConfigurationSaving = { Enabled = false }
+    })
+    
+    -- ... (CÁC CODE CŨ CỦA ÔNG GIỮ NGUYÊN TẠI ĐÂY) ...
+end
 
-local KeyTab = KeyWindow:CreateTab("Hệ Thống Key", 4483362458)
+local function CreateKeyUI()
+    local Frame = Instance.new("Frame", ScreenGui); Frame.Size = UDim2.new(0, 300, 0, 150); Frame.Position = UDim2.new(0.5, -150, 0.5, -75); Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    local Input = Instance.new("TextBox", Frame); Input.Size = UDim2.new(0.8, 0, 0.3, 0); Input.Position = UDim2.new(0.1, 0, 0.2, 0); Input.PlaceholderText = "Nhập Key..."
+    local Button = Instance.new("TextButton", Frame); Button.Size = UDim2.new(0.4, 0, 0.3, 0); Button.Position = UDim2.new(0.3, 0, 0.6, 0); Button.Text = "XÁC NHẬN"
+    
+    Button.MouseButton1Click:Connect(function()
+        if Input.Text == "Top1severscript_freekeynew" then
+            Frame:Destroy()
+            -- CHUYỂN SANG UI CHÀO MỪNG
+            local Welcome = Instance.new("Frame", ScreenGui); Welcome.Size = UDim2.new(0, 300, 0, 100); Welcome.Position = UDim2.new(0.5, -150, 0.5, -50); Welcome.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            local Label = Instance.new("TextLabel", Welcome); Label.Size = UDim2.new(1, 0, 1, 0); Label.Text = "Đang khởi động..."; Label.TextColor3 = Color3.new(1, 1, 1); Label.BackgroundTransparency = 1
+            task.wait(2)
+            Welcome:Destroy()
+            ScreenGui:Destroy() -- Xóa sạch UI thủ công
+            StartMainScript()   -- CHỈ KHI NÀY RAYFIELD MỚI ĐƯỢC GỌI
+        else
+            Input.Text = "SAI KEY!"
+        end
+    end)
+end
 
-KeyTab:CreateInput({
-   Name = "Nhập Key Tại Đây",
-   PlaceholderText = "Điền key của bạn...",
-   RemoveTextAfterFocusLost = false,
-   Callback = function(Text)
-      if Text == CorrectKey then
-         Rayfield:Notify({Title = "Hệ Thống Key", Content = "Key chính xác!", Duration = 2})
-         
-         -- CHỈ ĐÓNG BẢNG NHẬP KEY, KHÔNG HỦY THƯ VIỆN
-         KeyWindow:Destroy() 
-         task.wait(0.5)
-         
-         -- 2. MỞ UI CHÀO MỪNG
-         local WelcomeWindow = Rayfield:CreateWindow({
-            Name = "Duydepzai Hub — Welcome",
-            LoadingTitle = "Chào mừng đến với DUYDEPZAI HUB",
-            LoadingSubtitle = "Đang khởi động...",
-            ConfigurationSaving = { Enabled = false }
-         })
-         
-         for i = 0, 100, 10 do
-             WelcomeWindow:SetLoadingSubtitle("Đang tải dữ liệu: " .. i .. "%")
-             task.wait(0.2) 
-         end
-         
-         WelcomeWindow:Destroy()
-         task.wait(0.5)
-         
-         -- 3. MỞ UI CHÍNH
-         StartMainScript()
-         
-      else
-         Rayfield:Notify({Title = "Key System", Content = "Key sai rồi!", Duration = 3})
-      end
-   end,
-})
-
-KeyTab:CreateButton({
-   Name = "Lấy Key Tại Đây",
-   Callback = function()
-      setclipboard("Top1severscript_freekeynew")
-      Rayfield:Notify({Title = "Hệ Thống Key", Content = "Đã copy link discord!", Duration = 3})
-   end,
-})
-
--- Dòng này ông KHÔNG XÓA, nó sẽ nối tiếp với đoạn code menu chính ở dưới
-
-function StartMainScript()
-local Window = Rayfield:CreateWindow({
-   Name = "duydepzai Hub",
-   LoadingTitle = "Đang đồng bộ giao diện...",
-   LoadingSubtitle = "by Duydepzai",
-   ConfigurationSaving = { Enabled = false }
-})
-
+CreateKeyUI() -- BẮT ĐẦU CHẠY
 --- BIẾN HỆ THỐNG
 getgenv().Aimbot = false
 getgenv().TeamCheck = false
